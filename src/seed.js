@@ -34,7 +34,7 @@ function main() {
         yield prisma.dashboard.create({
             data: {
                 name: "Dashboard 2",
-                position: 1,
+                position: 0,
                 contents: {
                     create: [
                         {

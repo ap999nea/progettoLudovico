@@ -1,33 +1,24 @@
 import express from "express";
-import { PrismaClient } from "@prisma/client";
-import { DashboardService } from "./dashboard-service";
+//import { PrismaClient } from "@prisma/client";
+//import { DashboardService } from "./dashboard-service";
+import { app } from "./app";
+import { prisma } from "./prisma";
+import { auth } from "./auth";
+const path = require("path");
 
-const prisma = new PrismaClient();
+//const prisma = new PrismaClient();
 
 const server = express();
 
-const dashboardService = new DashboardService();
+//const dashboardService = new DashboardService();
 
 server.use(express.json());
-
-server.post("/:dashboardId/move", async (req, res) => {
-  const { position } = req.body;
-  const { dashboardId } = req.params;
-  // Controlla che la dashboard esista
-  // Sposta la dashboard
-  const ok = await dashboardService.moveDashboard(dashboardId, position);
-  if (!ok) {
-    return res.status(401).send({ msg: "Cannot move dashboard" });
-  }
-
-  const dashboards = await dashboardService.getDashboards();
-  res.status(200).send(dashboards);
+server.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "/index.html"));
 });
-
-server.get("/", async (req, res) => {
-  const dashboards = await dashboardService.getDashboards();
-  res.status(200).send(dashboards);
-});
+server.use("/app", app);
+server.use("/auth", auth);
+//server.use(cors());
 
 const PORT = 4000;
 
