@@ -17,7 +17,7 @@ export class DashboardService {
       },
     });
 
-    if (position >= dashboards.length) {
+    if (position > dashboards.length) {
       return false;
     }
 
@@ -175,6 +175,7 @@ export class DashboardService {
   }
 
   getDashboards(userId: string) {
+    console.log(userId);
     return prisma.dashboard.findMany({
       where: {
         userId: userId,

@@ -1,11 +1,11 @@
-import express from "express";
-import { PrismaClient } from "@prisma/client";
 import { DashboardService } from "./dashboard-service";
 import { prisma } from "./prisma";
+import path from "path";
+import { Router } from "express";
+
+const app = Router();
 
 const dashboardService = new DashboardService();
-
-const app = express();
 
 const getUser = async () => {
   const user = await prisma.user.findFirst({
@@ -15,6 +15,20 @@ const getUser = async () => {
   });
   return user!;
 };
+
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "/index.html"));
+});
+
+app.get("/dashboards", async (req, res) => {
+  //const user = await getUser();
+  console.log("Qualsiasi cosa");
+  const dashboards = await dashboardService.getDashboards(
+    "cl3rphpmy0000twvqiqmpg29d"
+  );
+  console.log(dashboards);
+  res.status(200).send(dashboards);
+});
 
 app.post("/", async (req, res) => {
   const { name } = req.body;
@@ -98,12 +112,6 @@ app.post("/:dashboardId/:contentId/move", async (req, res) => {
     return res.status(401).send({ msg: "Cannot move content" });
   }
 
-  const dashboards = await dashboardService.getDashboards(user.id);
-  res.status(200).send(dashboards);
-});
-
-app.get("/", async (req, res) => {
-  const user = await getUser();
   const dashboards = await dashboardService.getDashboards(user.id);
   res.status(200).send(dashboards);
 });

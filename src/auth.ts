@@ -2,8 +2,9 @@ import express from "express";
 import { DashboardService } from "./dashboard-service";
 import { prisma } from "./prisma";
 import { hashSync } from "bcrypt";
+import { Router } from "express";
 
-const auth = express();
+const auth = Router();
 //auth.use(express.json());
 
 auth.post("/login", (req, res) => {});
