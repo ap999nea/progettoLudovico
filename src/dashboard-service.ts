@@ -17,7 +17,7 @@ export class DashboardService {
       },
     });
 
-    if (position > dashboards.length) {
+    if (position >= dashboards.length) {
       return false;
     }
 
@@ -83,7 +83,6 @@ export class DashboardService {
       },
     });
   }
-
   async deleteContent(userId: string, dashboardId: string, contentId: string) {
     const dashboard = await this.getDashboard(userId, dashboardId);
     if (!dashboard) {
@@ -98,7 +97,6 @@ export class DashboardService {
         },
       },
     });
-
     const allContents = await prisma.content.findMany({
       where: {
         dashboardId: dashboardId,
@@ -122,7 +120,6 @@ export class DashboardService {
     if (!fromDashboard) {
       return false;
     }
-
     if (!fromToSameDashboard) {
       const toDashboard = await this.getDashboard(userId, toDashboardId);
       if (!toDashboard) {
@@ -138,7 +135,6 @@ export class DashboardService {
         dashboardId: fromDashboardId,
       },
     });
-
     const toContents = fromToSameDashboard
       ? fromContents
       : await prisma.content.findMany({
@@ -175,7 +171,6 @@ export class DashboardService {
   }
 
   getDashboards(userId: string) {
-    console.log(userId);
     return prisma.dashboard.findMany({
       where: {
         userId: userId,
@@ -192,7 +187,6 @@ export class DashboardService {
       },
     });
   }
-
   private async reorderDashboards(dashboards: Dashboard[]) {
     //prisma.$transaction(); FA ESEGUIRE A PRISMA TANTE COSE CONTEMPORANEAMENTE
     const updates = dashboards.map((dash, position) => {
@@ -228,8 +222,8 @@ export class DashboardService {
     return prisma.dashboard.findUnique({
       where: {
         id_userId: {
-          id: userId,
-          userId: dashboardId,
+          userId: userId,
+          id: dashboardId,
         },
       },
     });

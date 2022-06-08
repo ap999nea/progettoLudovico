@@ -1,30 +1,24 @@
 import express from "express";
-//import { PrismaClient } from "@prisma/client";
-//import { DashboardService } from "./dashboard-service";
-import { prisma } from "./prisma";
-import { auth } from "./auth";
-import cors from "cors";
 import { app } from "./app";
-const path = require("path");
+import { prisma } from "./prisma";
+//import { auth } from "./auth";
+//const path = require("path");
+import cors from "cors";
 
 //const prisma = new PrismaClient();
 
 const server = express();
-server.use(cors());
-//const dashboardService = new DashboardService();
 
+server.use("/", express.static(__dirname + "/"));
 server.use(express.json());
-/*server.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "/index.html"));
-});*/
+server.use(cors());
 server.use("/app", app);
-server.use("/auth", auth);
-//server.use(cors());
+//server.use("/auth", auth);
 
 const PORT = 8000;
 
 const serverInstance = server.listen(PORT, () => {
-  console.log("🚀 Server is up at http://localhost:8000");
+  console.log("🚀 Server is up at http://localhost:" + PORT);
 });
 
 process.on("SIGTERM", async () => {
@@ -34,3 +28,5 @@ process.on("SIGTERM", async () => {
 });
 
 export default server;
+
+//cjboisuoubcip

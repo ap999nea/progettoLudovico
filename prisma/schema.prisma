@@ -38,3 +38,9 @@ model Content {
 
   @@unique([id, dashboardId])
 }
+
+model JwtKeys {
+  id Int @id @default(autoincrement())
+  privateKey String
+  publicKey String
+}

@@ -1,32 +1,29 @@
+import { Router } from "express";
 import { DashboardService } from "./dashboard-service";
 import { prisma } from "./prisma";
 import path from "path";
-import { Router } from "express";
-
-const app = Router();
 
 const dashboardService = new DashboardService();
 
-const getUser = async () => {
-  const user = await prisma.user.findFirst({
-    where: {
-      email: "ap999nea@apnea.com",
-    },
-  });
-  return user!;
-};
+const app = Router();
 
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "/index.html"));
 });
 
+const getUser = async () => {
+  const user = await prisma.user.findFirst({
+    where: {
+      email: "carloking@example.com",
+    },
+  });
+  return user!;
+};
+
 app.get("/dashboards", async (req, res) => {
-  //const user = await getUser();
-  console.log("Qualsiasi cosa");
   const dashboards = await dashboardService.getDashboards(
-    "cl3rphpmy0000twvqiqmpg29d"
+    "cl3tr0qtl0000akvqe5ztxszt"
   );
-  console.log(dashboards);
   res.status(200).send(dashboards);
 });
 
@@ -56,16 +53,17 @@ app.post("/:dashboardId/move", async (req, res) => {
   const dashboards = await dashboardService.getDashboards(user.id);
   res.status(200).send(dashboards);
 });
-
 app.post("/:dashboardId", async (req, res) => {
   const { dashboardId } = req.params;
   const { text } = req.body;
-  const user = await getUser();
-  await dashboardService.createContent(user.id, dashboardId, text);
+  //const user = await getUser();
+  const user = { id: "cl3tr0qtl0000akvqe5ztxszt" };
+  console.log("ciao");
+  const data = await dashboardService.createContent(user.id, dashboardId, text);
+  console.log(data);
   const dashboards = await dashboardService.getDashboards(user.id);
   res.status(200).send(dashboards);
 });
-
 app.delete("/:dashboardId", async (req, res) => {
   const { dashboardId } = req.params;
   const user = await getUser();
